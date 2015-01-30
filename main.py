@@ -4,6 +4,15 @@
 #
 ########################################
 
+#
+# first argument of the script is name of searched file
+# seconde one is path to directory containing pictures
+#
+
+import os
+import sys
+import random
+
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -35,20 +44,35 @@ def compare_histo(x,y):
     for i in xrange(256):
         diff += (xhis[0][i] - yhis[0][i])**2 + (xhis[1][i] - yhis[1][i])**2 + (xhis[2][i] - yhis[2][i])**2 
     return diff
-    
 
-im = Image.open("/home/pierre/Pictures/pict/kurz.jpg") #Can be many different formats.
-im2 = Image.open("/home/pierre/Pictures/pict/sluj.jpg") #Can be many different formats.
-im3 = Image.open("/home/pierre/Pictures/pict/nowi.jpg") #Can be many different formats.
-im4 = Image.open("/home/pierre/Pictures/pict/zabk.jpg") #Can be many different formats.
-im5 = Image.open("/home/pierre/Pictures/pict/drwa.jpg") #Can be many different formats.
-im6 = Image.open("/home/pierre/Pictures/pict/kapcz.jpg") #Can be many different formats.
-pix = im.load()
-print im.size #Get the width and height of the image for iterating over
-print pix[0,86]
-#print histogram(im)
-print compare_histo(im, im2)
-print compare_histo(im, im3)
-print compare_histo(im, im4)
-print compare_histo(im, im5)
-print compare_histo(im, im6)
+def pix_diff(a,b):
+    return (1.0*(a[0]-b[0])/256)**2 + (1.0*(a[1]-b[1])/256)**2 + (1.0*(a[2]-b[2])/256)**2
+
+def compare_parts(a,b):
+    diff = 0
+    pixa = a.load()
+    pixb = b.load()
+    n = 10000
+    for i in xrange(n):
+        x = random.random()
+        y = random.random()
+        diff += pix_diff(pixa[int(x*a.size[0]), int(y*a.size[1])], pixb[int(x*b.size[0]), int(y*b.size[1])]) 
+    return diff/n
+
+def compare_general(x,y,ar):
+    res = 1e-10
+    for f in ar:
+        res += 1/(f(x,y)+1e-10)
+    return 1/res
+
+def compare(x,y):
+    return compare_general(x,y,[compare_histo, compare_parts])
+
+def search(filename, dirname):
+    res = []
+    im = Image.open(filename)
+    for i in os.listdir(dirname):
+        res.append([i, compare(im, Image.open(dirname+'/'+i))])
+    return sorted(res, key = lambda x: x[1])
+
+print search(sys.argv[1], sys.argv[2])
