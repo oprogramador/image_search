@@ -25,14 +25,23 @@ from PIL import Image
 import piotr
 import daniel
 
+SMALL_VAL = 1e-10
+
 def compare_general(x,y,ar):
     res = 1e-10
     for f in ar:
-        res += 1/(f(x,y)+1e-10)
+        res += 1/(correct(f(x,y))+SMALL_VAL)
     return 1/res
 
 def compare(x,y):
-    return compare_general(x,y,[piotr.compare_histo, daniel.compare_histo, piotr.compare_parts])
+    return compare_general(x,y,[
+        piotr.compare_histo,
+        daniel.compare_histo,
+        piotr.compare_parts
+        ])
+
+def correct(res):
+    return 1/(1+1/(res+SMALL_VAL))
 
 def search(filename, dirname):
     res = []
