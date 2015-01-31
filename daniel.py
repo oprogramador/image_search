@@ -13,7 +13,7 @@ from skimage import data, img_as_float
 from skimage import exposure
 from PIL import Image
 
-import common
+import common.histogram
 
 def compare_histo(x,y):
     #diff - difference between two images

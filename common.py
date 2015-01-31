@@ -13,11 +13,18 @@ from skimage import exposure
 from PIL import Image
 
 def histogram(im):
+    #define three primary colors
     red = [0.0]*256
     green = [0.0]*256
     blue = [0.0]*256
+    
+    #define image field X * Y
     count = im.size[0] * im.size[1]
+    
+    #load image array
     pix = im.load()
+    
+    #calcualte histogram
     for x in xrange(im.size[0]):
         for y in xrange(im.size[1]):
             red[pix[x,y][0]] += 1
