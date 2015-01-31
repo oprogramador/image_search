@@ -20,8 +20,8 @@ def compare_histo(x,y):
     diff = 0
 
     #load histograms of 2 images
-    xhis = histogram(x)
-    yhis = histogram(y)
+    xhis = common.histogram(x)
+    yhis = common.histogram(y)
 
     #calculate difference using intersection method
     for i in xrange(256):

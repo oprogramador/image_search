@@ -23,6 +23,7 @@ from skimage import exposure
 from PIL import Image
 
 import piotr
+import daniel
 
 def compare_general(x,y,ar):
     res = 1e-10
@@ -31,7 +32,7 @@ def compare_general(x,y,ar):
     return 1/res
 
 def compare(x,y):
-    return compare_general(x,y,[piotr.compare_histo, piotr.compare_parts])
+    return compare_general(x,y,[piotr.compare_histo, daniel.compare_histo, piotr.compare_parts])
 
 def search(filename, dirname):
     res = []
