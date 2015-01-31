@@ -71,8 +71,15 @@ def compare(x,y):
 def search(filename, dirname):
     res = []
     im = Image.open(filename)
+    n = 1
+    total = len(os.listdir(dirname))
     for i in os.listdir(dirname):
-        res.append([i, compare(im, Image.open(dirname+'/'+i))])
+        try:
+            res.append([i, compare(im, Image.open(dirname+'/'+i))])
+            print 'compared '+str(n)+'/'+str(total)+' files'
+            n += 1
+        except:
+            pass
     return sorted(res, key = lambda x: x[1])
 
 print search(sys.argv[1], sys.argv[2])
