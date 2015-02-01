@@ -20,10 +20,12 @@ import numpy as np
 
 from skimage import data, img_as_float
 from skimage import exposure
+import PIL
 from PIL import Image
 
 import piotr
 import daniel
+import common
 
 SMALL_VAL = 1e-10
 
@@ -39,20 +41,23 @@ def compare(x,y):
         daniel.compare_histo,
         piotr.compare_parts,
         piotr.compare_small,
-        piotr.function_creator(6)
+        piotr.function_creator(6),
+        piotr.parts_with_move
         ])
 
 def correct(res):
     return 1/(1+1/(res+SMALL_VAL))
 
+
 def search(filename, dirname):
     res = []
-    im = Image.open(filename)
+    im = common.toRGB(Image.open(filename))
     n = 1
     total = len(os.listdir(dirname))
     for i in os.listdir(dirname):
         try:
-            res.append([i, compare(im, Image.open(dirname+'/'+i))])
+            if n>22:
+                res.append([i, compare(im, common.toRGB(Image.open(dirname+'/'+i)))])
             print 'compared '+str(n)+'/'+str(total)+' files'
             n += 1
         except IOError:

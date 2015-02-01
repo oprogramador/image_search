@@ -10,7 +10,13 @@ import random
 
 from skimage import data, img_as_float
 from skimage import exposure
+import PIL
 from PIL import Image
+
+def toRGB(im):
+    if not isinstance(im, PIL.JpegImagePlugin.JpegImageFile):
+        return im.convert('RGBA')
+    return im
 
 def histogram(im):
     #define three primary colors
@@ -27,6 +33,8 @@ def histogram(im):
     #calcualte histogram
     for x in xrange(im.size[0]):
         for y in xrange(im.size[1]):
+            if(type(pix[x,y])==int):
+                print 'type='+str(pix[x,y])
             red[pix[x,y][0]] += 1
             green[pix[x,y][1]] += 1
             blue[pix[x,y][2]] += 1
