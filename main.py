@@ -56,8 +56,7 @@ def search(filename, dirname):
     total = len(os.listdir(dirname))
     for i in os.listdir(dirname):
         try:
-            if n>22:
-                res.append([i, compare(im, common.toRGB(Image.open(dirname+'/'+i)))])
+            res.append([i, compare(im, common.toRGB(Image.open(dirname+'/'+i)))])
             print 'compared '+str(n)+'/'+str(total)+' files'
             n += 1
         except IOError:

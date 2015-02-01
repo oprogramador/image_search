@@ -15,7 +15,10 @@ from PIL import Image
 
 def toRGB(im):
     if not isinstance(im, PIL.JpegImagePlugin.JpegImageFile):
-        return im.convert('RGBA')
+       im.convert('RGB').save('kivZLnBtzDeh1EO0DKk9.jpg', 'JPEG') 
+       im = Image.open('kivZLnBtzDeh1EO0DKk9.jpg')
+       os.remove('kivZLnBtzDeh1EO0DKk9.jpg')
+       return im
     return im
 
 def histogram(im):
