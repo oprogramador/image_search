@@ -49,3 +49,25 @@ def histogram(im):
 
 def pix_diff(a,b):
     return (1.0*(a[0]-b[0])/256)**2 + (1.0*(a[1]-b[1])/256)**2 + (1.0*(a[2]-b[2])/256)**2
+
+def rand_vector(x,y):
+    return random.random()*x, random.random()*y
+
+def distance(a,b):
+    return ((a[0]-b[0])**2 + (a[1]-b[1])**2)*0.5
+
+def add_vec(a,b):
+    return a[0]+b[0], a[1]+b[1]
+
+def gradient(a):
+    n = 10000
+    d = 0
+    pix = a.load()
+    for i in xrange(n):
+        v1 = rand_vector(a.size[0], a.size[1])
+        v2 = add_vec(v1, rand_vector(a.size[0]*0.02, a.size[1]*0.02))
+        try:
+            d += pix_diff(pix[v1], pix[v2]) / distance(v1, v2)
+        except:
+            pass
+    return d/n

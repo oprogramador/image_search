@@ -42,7 +42,8 @@ def compare(x,y):
         piotr.compare_parts,
         piotr.compare_small,
         piotr.function_creator(6),
-        piotr.parts_with_move
+        piotr.parts_with_move,
+        piotr.by_gradient
         ])
 
 def correct(res):

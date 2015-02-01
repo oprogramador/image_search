@@ -63,3 +63,6 @@ def function_creator(n):
         #os.remove('kivZLnBtzDeh1EO0DKk9_b.png')
         return compare_parts(a, b)
     return f
+
+def by_gradient(a,b):
+    return abs(common.gradient(a) - common.gradient(b))
