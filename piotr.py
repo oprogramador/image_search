@@ -14,7 +14,7 @@ from PIL import Image
 
 import common
 
-def compare_histo(x,y):
+def ttttttttttttt(x,y):
     diff = 0
     xhis = common.histogram(x)
     yhis = common.histogram(y)
@@ -32,3 +32,17 @@ def compare_parts(a,b):
         y = random.random()
         diff += common.pix_diff(pixa[int(x*a.size[0]), int(y*a.size[1])], pixb[int(x*b.size[0]), int(y*b.size[1])]) 
     return diff/n
+
+def compare_small(a,b):
+    return compare_histo(a.resize((8,8), Image.ANTIALIAS), b.resize((8,8), Image.ANTIALIAS))
+
+def function_creator(n):
+    def f(a,b):
+        a.convert('P', palette=Image.ADAPTIVE, colors=n).convert('RGB').save('kivZLnBtzDeh1EO0DKk9_a.png')
+        b.convert('P', palette=Image.ADAPTIVE, colors=n).convert('RGB').save('kivZLnBtzDeh1EO0DKk9_b.png')
+        a = Image.open('kivZLnBtzDeh1EO0DKk9_a.png')
+        b = Image.open('kivZLnBtzDeh1EO0DKk9_b.png')
+        os.remove('kivZLnBtzDeh1EO0DKk9_a.png')
+        os.remove('kivZLnBtzDeh1EO0DKk9_b.png')
+        return compare_parts(a, b)
+    return f

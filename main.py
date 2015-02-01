@@ -37,7 +37,9 @@ def compare(x,y):
     return compare_general(x,y,[
         piotr.compare_histo,
         daniel.compare_histo,
-        piotr.compare_parts
+        piotr.compare_parts,
+        piotr.compare_small
+        piotr.function_creator(6)
         ])
 
 def correct(res):
