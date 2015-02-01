@@ -38,7 +38,7 @@ def compare(x,y):
         piotr.compare_histo,
         daniel.compare_histo,
         piotr.compare_parts,
-        piotr.compare_small
+        piotr.compare_small,
         piotr.function_creator(6)
         ])
 

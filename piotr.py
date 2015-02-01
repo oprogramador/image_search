@@ -14,7 +14,7 @@ from PIL import Image
 
 import common
 
-def ttttttttttttt(x,y):
+def compare_histo(x,y):
     diff = 0
     xhis = common.histogram(x)
     yhis = common.histogram(y)
