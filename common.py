@@ -13,6 +13,21 @@ from skimage import exposure
 import PIL
 from PIL import Image
 
+def cal_diff(a,b):
+    d = 0
+    for i in xrange(len(a)):
+        if type(a[i]) == list:
+            d += cal_diff(a[i], b[i])
+        else:
+            d += (a[i] - b[i])**2
+    return d
+
+def make_compare_any(f):
+    def cmp(x,y):
+        return cal_diff(f(x), f(y))
+    return cmp
+
+
 def toRGB(im):
     if not isinstance(im, PIL.JpegImagePlugin.JpegImageFile):
        im.convert('RGB').save('kivZLnBtzDeh1EO0DKk9.jpg', 'JPEG') 
@@ -71,3 +86,27 @@ def gradient(a):
         except:
             pass
     return d/n
+
+def direction(a):
+    n = 10000
+    res = [0.0, 0.0, 0.0, 0.0]
+    pix = a.load()
+    for i in xrange(n):
+        v = rand_vector(a.size[0], a.size[1])
+        try:
+            down = pix_diff(pix[v], pix[add_vec(v, (0, 1))])
+            up = pix_diff(pix[v], pix[add_vec(v, (0, -1))])
+            left = pix_diff(pix[v], pix[add_vec(v, (-1, 0))])
+            right = pix_diff(pix[v], pix[add_vec(v, (1, 0))])
+            mi = min(down, up, left, right)
+            if down==mi:
+                res[0] += 1
+            elif up==mi:
+                res[1] += 1
+            elif left==mi:
+                res[2] += 1
+            elif right==mi:
+                res[3] += 1
+        except:
+            pass
+    return map(lambda x: x/n, res)

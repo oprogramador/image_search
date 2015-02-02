@@ -29,6 +29,8 @@ import common
 
 SMALL_VAL = 1e-10
 
+
+
 def compare_general(x,y,ar):
     res = 1e-10
     for f in ar:
@@ -43,7 +45,8 @@ def compare(x,y):
         piotr.compare_small,
         piotr.function_creator(6),
         piotr.parts_with_move,
-        piotr.by_gradient
+        piotr.by_gradient,
+        piotr.compare_direction
         ])
 
 def correct(res):

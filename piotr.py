@@ -14,13 +14,8 @@ from PIL import Image
 
 import common
 
-def compare_histo(x,y):
-    diff = 0
-    xhis = common.histogram(x)
-    yhis = common.histogram(y)
-    for i in xrange(256):
-        diff += (xhis[0][i] - yhis[0][i])**2 + (xhis[1][i] - yhis[1][i])**2 + (xhis[2][i] - yhis[2][i])**2 
-    return diff
+compare_histo = common.make_compare_any( common.histogram )
+compare_direction = common.make_compare_any( common.direction )
 
 def compare_parts(a,b):
     diff = 0
