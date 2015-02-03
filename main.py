@@ -46,7 +46,7 @@ def compare(x,y):
         piotr.function_creator(6),
         piotr.parts_with_move,
         piotr.by_gradient,
-        piotr.compare_direction
+        piotr.compare_direction,
         ])
 
 def correct(res):
