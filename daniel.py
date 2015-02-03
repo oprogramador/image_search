@@ -18,6 +18,12 @@ from scipy.linalg import norm
 from scipy import sum, average
 
 import common
+<<<<<<< HEAD
+=======
+
+
+    
+>>>>>>> fa4b718cc1d6ccc6b23cf1290cb415028e1f164b
     
 def compare_histo(x,y):
     #diff - difference between two images
