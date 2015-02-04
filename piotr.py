@@ -20,15 +20,17 @@ compare_direction = common.make_compare_any( common.direction )
 by_magick = common.make_compare_any( common.magick )
 
 def by_gradient(a,b):
+    a,b = common.MyImage.to_images((a,b))
     return abs(common.gradient(a) - common.gradient(b))
 
 def by_edges_count(a,b):
     return abs(common.edges_count(a) - common.edges_count(b))
 
 def compare_parts(a,b):
-    diff = 0
     pixa = a.load()
     pixb = b.load()
+    a,b = common.MyImage.to_images((a,b))
+    diff = 0
     n = 10000
     for i in xrange(n):
         x = random.random()
@@ -40,6 +42,7 @@ def parts_with_move(a,b):
     diff = 0
     pixa = a.load()
     pixb = b.load()
+    a,b = common.MyImage.to_images((a,b))
     n = 10000
     for i in xrange(n):
         x = random.random()
@@ -53,6 +56,7 @@ def parts_with_move(a,b):
     return diff/n
 
 def compare_small(a,b):
+    a,b = common.MyImage.to_images((a,b))
     size = (8,8)
     return compare_histo(a.resize(size, Image.ANTIALIAS), b.resize(size, Image.ANTIALIAS))
 

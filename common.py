@@ -57,6 +57,13 @@ class MyImage:
             self.image = self._image.resize((8,8), Image.ANTIALIAS)
         return self
 
+    def get_image(self):
+        return self._image
+
+    @staticmethod
+    def to_images(tup):
+        return map(lambda x: x.get_image() if x.__class__ == MyImage else x, tup)
+
 
 def cal_diff(a,b):
     d = 0
@@ -68,8 +75,9 @@ def cal_diff(a,b):
     return d
 
 def make_compare_any(f):
-    def cmp(x,y):
-        return cal_diff(f(x), f(y))
+    def cmp(a,b):
+        a,b = MyImage.to_images((a,b))
+        return cal_diff(f(a), f(b))
     return cmp
 
 
