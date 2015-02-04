@@ -22,6 +22,11 @@ def cal_diff(a,b):
             d += (a[i] - b[i])**2
     return d
 
+def minimize(a):
+    if a.size[0] * a.size[1] > 4096:
+        return a.resize((8,8), Image.ANTIALIAS)
+    return a
+
 def make_compare_any(f):
     def cmp(x,y):
         return cal_diff(f(x), f(y))
@@ -48,11 +53,9 @@ def histogram(im):
     #load image array
     pix = im.load()
     
-    #calcualte histogram
+    #calculate histogram
     for x in xrange(im.size[0]):
         for y in xrange(im.size[1]):
-            if(type(pix[x,y])==int):
-                print 'type='+str(pix[x,y])
             red[pix[x,y][0]] += 1
             green[pix[x,y][1]] += 1
             blue[pix[x,y][2]] += 1
@@ -61,6 +64,30 @@ def histogram(im):
     blue = map(lambda x: x/count, blue)
     return (red, green, blue)
 
+def histogram_rand(im):
+    #define three primary colors
+    red = [0.0]*256
+    green = [0.0]*256
+    blue = [0.0]*256
+    
+    #define image field X * Y
+    count = im.size[0] * im.size[1]
+    
+    #load image array
+    pix = im.load()
+    
+    #calculate histogram
+    n = 10000
+    for i in xrange(n):
+        x = random.random()
+        y = random.random()
+        red[pix[x,y][0]] += 1
+        green[pix[x,y][1]] += 1
+        blue[pix[x,y][2]] += 1
+    red = map(lambda x: x/count, red)
+    green = map(lambda x: x/count, green)
+    blue = map(lambda x: x/count, blue)
+    return (red, green, blue)
 
 def pix_diff(a,b):
     return (1.0*(a[0]-b[0])/256)**2 + (1.0*(a[1]-b[1])/256)**2 + (1.0*(a[2]-b[2])/256)**2
@@ -110,3 +137,15 @@ def direction(a):
         except:
             pass
     return map(lambda x: x/n, res)
+
+def magick(im):
+    im = im.resize((16,16), Image.ANTIALIAS)
+    pix = im.load()
+    mag_nums = [2,3,7,23]
+    res = [[0.0]*len(mag_nums)]*3
+    for x in xrange(im.size[0]):
+        for y in xrange(im.size[1]):
+            for color in xrange(3):
+                for i in xrange(len(mag_nums)):
+                    res[color][i] += 1.0 * (pix[x,y][color] % mag_nums[i]) / mag_nums[i]
+    return map(lambda a: map(lambda x: x/im.size[0]/im.size[1], a), res)

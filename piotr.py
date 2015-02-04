@@ -15,7 +15,9 @@ from PIL import Image
 import common
 
 compare_histo = common.make_compare_any( common.histogram )
+compare_histo_rand = common.make_compare_any( common.histogram_rand )
 compare_direction = common.make_compare_any( common.direction )
+by_magick = common.make_compare_any( common.magick )
 
 def compare_parts(a,b):
     diff = 0
@@ -45,17 +47,13 @@ def parts_with_move(a,b):
     return diff/n
 
 def compare_small(a,b):
-    return compare_histo(a.resize((8,8), Image.ANTIALIAS), b.resize((8,8), Image.ANTIALIAS))
+    size = (8,8)
+    return compare_histo(a.resize(size, Image.ANTIALIAS), b.resize(size, Image.ANTIALIAS))
 
 def function_creator(n):
     def f(a,b):
         a = common.toRGB(a.convert('P', palette=Image.ADAPTIVE, colors=n))
         b = common.toRGB(b.convert('P', palette=Image.ADAPTIVE, colors=n))
-        #b.convert('P', palette=Image.ADAPTIVE, colors=n).convert('RGBA').save('kivZLnBtzDeh1EO0DKk9_b.png')
-        #a = Image.open('kivZLnBtzDeh1EO0DKk9_a.png')
-        #b = Image.open('kivZLnBtzDeh1EO0DKk9_b.png')
-        #os.remove('kivZLnBtzDeh1EO0DKk9_a.png')
-        #os.remove('kivZLnBtzDeh1EO0DKk9_b.png')
         return compare_parts(a, b)
     return f
 

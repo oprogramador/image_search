@@ -13,6 +13,7 @@ import os
 import sys
 import random
 import traceback
+import json
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -39,14 +40,15 @@ def compare_general(x,y,ar):
 
 def compare(x,y):
     return compare_general(x,y,[
-        piotr.compare_histo,
-        daniel.compare_histo,
+        #piotr.compare_histo,
+        #daniel.compare_histo,
         piotr.compare_parts,
-        piotr.compare_small,
+        #piotr.compare_small,
         piotr.function_creator(6),
-        piotr.parts_with_move,
-        piotr.by_gradient,
+        #piotr.parts_with_move,
+        #piotr.by_gradient,
         piotr.compare_direction,
+        #piotr.by_magick,
         ])
 
 def correct(res):
@@ -55,12 +57,12 @@ def correct(res):
 
 def search(filename, dirname):
     res = []
-    im = common.toRGB(Image.open(filename))
+    im = common.minimize(common.toRGB(Image.open(filename)))
     n = 1
     total = len(os.listdir(dirname))
     for i in os.listdir(dirname):
         try:
-            res.append([i, compare(im, common.toRGB(Image.open(dirname+'/'+i)))])
+            res.append([i, compare(im, common.minimize(common.toRGB(Image.open(dirname+'/'+i))))])
             print 'compared '+str(n)+'/'+str(total)+' files'
             n += 1
         except IOError:
@@ -70,4 +72,4 @@ def search(filename, dirname):
             print("END\n")
     return sorted(res, key = lambda x: x[1])
 
-print search(sys.argv[1], sys.argv[2])
+print json.dumps(search(sys.argv[1], sys.argv[2]))
