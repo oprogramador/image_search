@@ -42,13 +42,14 @@ def compare(x,y):
     return compare_general(x,y,[
         #piotr.compare_histo,
         #daniel.compare_histo,
-        piotr.compare_parts,
+        #piotr.compare_parts,        #OK
         #piotr.compare_small,
-        piotr.function_creator(6),
+        piotr.function_creator(6),  #OK
         #piotr.parts_with_move,
         #piotr.by_gradient,
-        piotr.compare_direction,
+        #piotr.compare_direction,    #OK
         #piotr.by_magick,
+        #piotr.by_edges_count        #OK
         ])
 
 def correct(res):
@@ -57,12 +58,12 @@ def correct(res):
 
 def search(filename, dirname):
     res = []
-    im = common.minimize(common.toRGB(Image.open(filename)))
+    im = common.MyImage(filename).toRGB().minimize()
     n = 1
     total = len(os.listdir(dirname))
     for i in os.listdir(dirname):
         try:
-            res.append([i, compare(im, common.minimize(common.toRGB(Image.open(dirname+'/'+i))))])
+            res.append([i, compare(im, common.MyImage(dirname+'/'+i).toRGB().minimize())])
             print 'compared '+str(n)+'/'+str(total)+' files'
             n += 1
         except IOError:

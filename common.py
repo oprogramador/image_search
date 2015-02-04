@@ -12,6 +12,51 @@ from skimage import data, img_as_float
 from skimage import exposure
 import PIL
 from PIL import Image
+import cv2
+import numpy as np
+
+class MyImage:
+    def __init__(self, fname):
+       self._image = Image.open(fname) 
+       self.pix = None
+       self.name = fname
+
+    def __getattr__(self, key):
+        if key == '_image':
+            raise AttributeErrror()
+        else:
+            try:
+                return getattr(self, key)
+            except:
+                a = getattr(self._image, key)
+                if not hasattr(a, '__call__'):
+                    return a
+                else:
+                    return self.make_fun(key)
+    
+    def make_fun(self, key):
+        def f(*args, **kwargs):
+            self.__image = getattr(self._image, key)(*args, **kwargs)
+            return self
+        return f
+
+    def load(self):
+        if self.pix == None:
+            self.pix = self._image.load()
+        return self._image.load()
+
+    def toRGB(self):
+        if not isinstance(self._image, PIL.JpegImagePlugin.JpegImageFile):
+           self._image.convert('RGB').save('kivZLnBtzDeh1EO0DKk9.jpg', 'JPEG') 
+           self._image = Image.open('kivZLnBtzDeh1EO0DKk9.jpg')
+           os.remove('kivZLnBtzDeh1EO0DKk9.jpg')
+        return self
+
+    def minimize(self):
+        if self._image.size[0] * self._image.size[1] > 4096:
+            self.image = self._image.resize((8,8), Image.ANTIALIAS)
+        return self
+
 
 def cal_diff(a,b):
     d = 0
@@ -22,24 +67,12 @@ def cal_diff(a,b):
             d += (a[i] - b[i])**2
     return d
 
-def minimize(a):
-    if a.size[0] * a.size[1] > 4096:
-        return a.resize((8,8), Image.ANTIALIAS)
-    return a
-
 def make_compare_any(f):
     def cmp(x,y):
         return cal_diff(f(x), f(y))
     return cmp
 
 
-def toRGB(im):
-    if not isinstance(im, PIL.JpegImagePlugin.JpegImageFile):
-       im.convert('RGB').save('kivZLnBtzDeh1EO0DKk9.jpg', 'JPEG') 
-       im = Image.open('kivZLnBtzDeh1EO0DKk9.jpg')
-       os.remove('kivZLnBtzDeh1EO0DKk9.jpg')
-       return im
-    return im
 
 def histogram(im):
     #define three primary colors
@@ -149,3 +182,12 @@ def magick(im):
                 for i in xrange(len(mag_nums)):
                     res[color][i] += 1.0 * (pix[x,y][color] % mag_nums[i]) / mag_nums[i]
     return map(lambda a: map(lambda x: x/im.size[0]/im.size[1], a), res)
+
+def edges_count(im):
+    img = cv2.Canny(cv2.imread(im.name, 0), 128, 256)
+    s = 0.0
+    for x in xrange(img.shape[0]):
+       for y in xrange(img.shape[1]):
+           if img[x,y]!=0:
+               s += 1
+    return s/img.size

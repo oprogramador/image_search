@@ -19,6 +19,12 @@ compare_histo_rand = common.make_compare_any( common.histogram_rand )
 compare_direction = common.make_compare_any( common.direction )
 by_magick = common.make_compare_any( common.magick )
 
+def by_gradient(a,b):
+    return abs(common.gradient(a) - common.gradient(b))
+
+def by_edges_count(a,b):
+    return abs(common.edges_count(a) - common.edges_count(b))
+
 def compare_parts(a,b):
     diff = 0
     pixa = a.load()
@@ -52,10 +58,7 @@ def compare_small(a,b):
 
 def function_creator(n):
     def f(a,b):
-        a = common.toRGB(a.convert('P', palette=Image.ADAPTIVE, colors=n))
-        b = common.toRGB(b.convert('P', palette=Image.ADAPTIVE, colors=n))
+        a = a.convert('P', palette=Image.ADAPTIVE, colors=n).toRGB()
+        b = b.convert('P', palette=Image.ADAPTIVE, colors=n).toRGB()
         return compare_parts(a, b)
     return f
-
-def by_gradient(a,b):
-    return abs(common.gradient(a) - common.gradient(b))
