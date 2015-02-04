@@ -26,6 +26,9 @@ def by_gradient(a,b):
 def by_edges_count(a,b):
     return abs(common.edges_count(a) - common.edges_count(b))
 
+def by_edges_direction(a,b):
+    return abs(common.edges_direction(a) - common.edges_direction(b))
+
 def compare_parts(a,b):
     pixa = a.load()
     pixb = b.load()

@@ -20,6 +20,7 @@ class MyImage:
        self._image = Image.open(fname) 
        self.pix = None
        self.name = fname
+       self.properties = {}
 
     def __getattr__(self, key):
         if key == '_image':
@@ -192,10 +193,29 @@ def magick(im):
     return map(lambda a: map(lambda x: x/im.size[0]/im.size[1], a), res)
 
 def edges_count(im):
-    img = cv2.Canny(cv2.imread(im.name, 0), 128, 256)
+    if not hasattr(im, 'cv2'):
+        im.cv2 = cv2.Canny(cv2.imread(im.name, 0), 128, 256)
+    img = im.cv2
     s = 0.0
     for x in xrange(img.shape[0]):
        for y in xrange(img.shape[1]):
-           if img[x,y]!=0:
+           if img[x,y] != 0:
                s += 1
     return s/img.size
+
+def edges_direction(im):
+    if not hasattr(im, 'cv2'):
+        im.cv2 = cv2.Canny(cv2.imread(im.name, 0), 128, 256)
+    img = im.cv2
+    ver = 1.0
+    hor = 1.0
+    for x in xrange(img.shape[0]):
+        for y in xrange(img.shape[1]):
+            try:
+                if img[x,y] != 0 and (img[x+1,y] != 0 or img[x-1,y] != 0):
+                    hor += 1
+                if img[x,y] != 0 and (img[x,y+1] != 0 or img[x,y-1] != 0):
+                    ver += 1
+            except:
+                pass
+    return hor/ver

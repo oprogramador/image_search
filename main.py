@@ -40,16 +40,17 @@ def compare_general(x,y,ar):
 
 def compare(x,y):
     return compare_general(x,y,[
-        piotr.compare_histo,
-        daniel.compare_histo,
+        #piotr.compare_histo,
+        #daniel.compare_histo,
         piotr.compare_parts,        #OK
-        piotr.compare_small,
+        #piotr.compare_small,
         piotr.function_creator(6),  #OK
-        piotr.parts_with_move,
-        piotr.by_gradient,
+        #piotr.parts_with_move,
+        #piotr.by_gradient,
         piotr.compare_direction,    #OK
-        piotr.by_magick,
-        piotr.by_edges_count        #OK
+        #piotr.by_magick,
+        piotr.by_edges_count,       #OK
+        piotr.by_edges_direction,   #OK
         ])
 
 def correct(res):
