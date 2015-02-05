@@ -8,20 +8,22 @@ import os
 import sys
 import random
 
-from skimage import data, img_as_float
-from skimage import exposure
 import PIL
 from PIL import Image
 import cv2
 import numpy as np
 
+# image class
 class MyImage:
+
+    # constructor
     def __init__(self, fname):
        self._image = Image.open(fname) 
        self.pix = None
        self.name = fname
        self.properties = {}
 
+    # inheritance from PIL.Image - pools
     def __getattr__(self, key):
         if key == '_image':
             raise AttributeErrror()
@@ -35,17 +37,20 @@ class MyImage:
                 else:
                     return self.make_fun(key)
     
+    # inheritance from PIL.Image - methods
     def make_fun(self, key):
         def f(*args, **kwargs):
             self.__image = getattr(self._image, key)(*args, **kwargs)
             return self
         return f
 
+    # loading pixels only once
     def load(self):
         if self.pix == None:
             self.pix = self._image.load()
         return self._image.load()
 
+    # conversion to RGB
     def toRGB(self):
         if not isinstance(self._image, PIL.JpegImagePlugin.JpegImageFile):
            self._image.convert('RGB').save('kivZLnBtzDeh1EO0DKk9.jpg', 'JPEG') 
@@ -53,19 +58,24 @@ class MyImage:
            os.remove('kivZLnBtzDeh1EO0DKk9.jpg')
         return self
 
+    # scale large images
     def minimize(self):
         if self._image.size[0] * self._image.size[1] > 4096:
             self.image = self._image.resize((8,8), Image.ANTIALIAS)
         return self
 
+    # get PIL.Image object for fastest availability
     def get_image(self):
         return self._image
 
+    # conversion arguments to PIL.Image objects
     @staticmethod
     def to_images(tup):
         return map(lambda x: x.get_image() if x.__class__ == MyImage else x, tup)
 
 
+
+# difference of arrays using smallest squares method
 def cal_diff(a,b):
     d = 0
     for i in xrange(len(a)):
@@ -75,6 +85,7 @@ def cal_diff(a,b):
             d += (a[i] - b[i])**2
     return d
 
+# general difference of images with method f
 def make_compare_any(f):
     def cmp(a,b):
         a,b = MyImage.to_images((a,b))
@@ -83,6 +94,7 @@ def make_compare_any(f):
 
 
 
+# histogram
 def histogram(im):
     #define three primary colors
     red = [0.0]*256
@@ -106,6 +118,7 @@ def histogram(im):
     blue = map(lambda x: x/count, blue)
     return (red, green, blue)
 
+# histogram with random pixels
 def histogram_rand(im):
     #define three primary colors
     red = [0.0]*256
@@ -131,18 +144,23 @@ def histogram_rand(im):
     blue = map(lambda x: x/count, blue)
     return (red, green, blue)
 
+# difference between pixels
 def pix_diff(a,b):
     return (1.0*(a[0]-b[0])/256)**2 + (1.0*(a[1]-b[1])/256)**2 + (1.0*(a[2]-b[2])/256)**2
 
+# random vector
 def rand_vector(x,y):
     return random.random()*x, random.random()*y
 
+# vector distance
 def distance(a,b):
     return ((a[0]-b[0])**2 + (a[1]-b[1])**2)*0.5
 
+# vector addition
 def add_vec(a,b):
     return a[0]+b[0], a[1]+b[1]
 
+# gradient (difference between pixels at small distance from each other)
 def gradient(a):
     n = 10000
     d = 0
@@ -156,6 +174,7 @@ def gradient(a):
             pass
     return d/n
 
+# direction of similar neighbour pixels
 def direction(a):
     n = 10000
     res = [0.0, 0.0, 0.0, 0.0]
@@ -180,6 +199,7 @@ def direction(a):
             pass
     return map(lambda x: x/n, res)
 
+# pixels modulo values
 def magick(im):
     im = im.resize((16,16), Image.ANTIALIAS)
     pix = im.load()
@@ -192,6 +212,7 @@ def magick(im):
                     res[color][i] += 1.0 * (pix[x,y][color] % mag_nums[i]) / mag_nums[i]
     return map(lambda a: map(lambda x: x/im.size[0]/im.size[1], a), res)
 
+# count of pixels withing edges
 def edges_count(im):
     if not hasattr(im, 'cv2'):
         im.cv2 = cv2.Canny(cv2.imread(im.name, 0), 128, 256)
@@ -203,6 +224,7 @@ def edges_count(im):
                s += 1
     return s/img.size
 
+# edges direction
 def edges_direction(im):
     if not hasattr(im, 'cv2'):
         im.cv2 = cv2.Canny(cv2.imread(im.name, 0), 128, 256)

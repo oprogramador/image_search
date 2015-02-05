@@ -5,8 +5,8 @@
 ########################################
 
 #
-# first argument of the script is name of searched file
-# seconde one is path to directory containing pictures
+# first argument of the script is the name of the searched file
+# second one is the path to the directory containing pictures
 #
 
 import os
@@ -15,12 +15,6 @@ import random
 import traceback
 import json
 
-import matplotlib
-import matplotlib.pyplot as plt
-import numpy as np
-
-from skimage import data, img_as_float
-from skimage import exposure
 import PIL
 from PIL import Image
 
@@ -32,12 +26,14 @@ SMALL_VAL = 1e-10
 
 
 
+# general comparison
 def compare_general(x,y,ar):
     res = 1e-10
     for f in ar:
         res += 1/(correct(f(x,y))+SMALL_VAL)
     return 1/res
 
+# define used methods
 def compare(x,y):
     return compare_general(x,y,[
         #piotr.compare_histo,
@@ -53,10 +49,12 @@ def compare(x,y):
         piotr.by_edges_direction,   #OK
         ])
 
+# correction of similarity coefficient
 def correct(res):
     return 1/(1+1/(res+SMALL_VAL))
 
 
+# search similar images within directory
 def search(filename, dirname):
     res = []
     im = common.MyImage(filename).toRGB().minimize()
@@ -74,4 +72,5 @@ def search(filename, dirname):
             print("END\n")
     return sorted(res, key = lambda x: x[1])
 
+# printing result in json
 print json.dumps(search(sys.argv[1], sys.argv[2]))

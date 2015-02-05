@@ -5,20 +5,9 @@
 #
 ########################################
 
-import os
-import sys
-import random
-
-from skimage import data, img_as_float
-from skimage import exposure
-from PIL import Image
-
-from scipy.misc import imread
-from scipy.linalg import norm
-from scipy import sum, average
-
 import common
     
+# comparison of histogram
 def compare_histo(x,y):
     #diff - difference between two images
     diff = 0
