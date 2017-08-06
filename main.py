@@ -1,9 +1,3 @@
-########################################
-#
-# Author: Piotr Sroczkowski
-#
-########################################
-
 #
 # first argument of the script is the name of the searched file
 # second one is the path to the directory containing pictures

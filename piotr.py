@@ -1,9 +1,3 @@
-########################################
-#
-# Author: Piotr Sroczkowski
-#
-########################################
-
 import os
 import sys
 import random

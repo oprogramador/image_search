@@ -1,10 +1,3 @@
-########################################
-#
-# Author: Daniel Mikulski
-# Silesian University of Technology
-#
-########################################
-
 import common
     
 # comparison of histogram
